@@ -29,8 +29,31 @@ const Project: FC<ProjectProps> = ({}) => {
         }
 
         const jsonData = await response.json();
+        const parsedData = JSON.parse(jsonData.data);
+        const totalIssues = jsonData.total_issues;
+        const totalBlocker = jsonData.total_blocker;
+        const totalCritical = jsonData.total_critical;
+        const totalMajor = jsonData.total_major;
+        const totalMinor = jsonData.total_minor;
+        const totalOpen = jsonData.total_open;
+        const totalClosed = jsonData.total_closed;
+        const totalreopened = jsonData.total_reopened;
+        const totalInProgress = jsonData.total_in_progress;
+        const totalCustomerApproval = jsonData.total_customer_approval;
 
-        setData(jsonData);
+        setData({
+          ...parsedData,
+          totalIssues,
+          totalBlocker,
+          totalCritical,
+          totalMajor,
+          totalMinor,
+          totalOpen,
+          totalClosed,
+          totalreopened,
+          totalInProgress,
+          totalCustomerApproval,
+        });
       } catch (error) {
         setError(error);
       }
@@ -50,7 +73,17 @@ const Project: FC<ProjectProps> = ({}) => {
   return (
     <div>
       <div>
-        <h3>{data && data.total}</h3>
+        <h3>{data && data.totalIssues}</h3>
+        <h3>{data && data.totalBlocker}</h3>
+        <h3>{data && data.totalCritical}</h3>
+        <h3>{data && data.totalMajor}</h3>
+        <h3>{data && data.totalMinor}</h3>
+        <br />
+        <h3>{data && data.totalOpen}</h3>
+        <h3>{data && data.totalClosed}</h3>
+        <h3>{data && data.totalreopened}</h3>
+        <h3>{data && data.totalInProgress}</h3>
+        <h3>{data && data.totalCustomerApproval}</h3>
         <ul>
           {data && data.issues ? (
             data.issues.map((issue: any) => (
