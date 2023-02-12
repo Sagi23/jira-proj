@@ -6,10 +6,20 @@ interface ProjectProps {}
 const Project: FC<ProjectProps> = ({}) => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<Error | null | any>(null);
-  const [currentPage, setCurrentPage] = useState<number>(2);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const router = useRouter();
-  const { id: project_id } = router.query;
+
+  let { id: project_id } = router.query;
+
+  if (typeof window !== "undefined" && window.localStorage) {
+    const storedProjectId = localStorage.getItem("project_id");
+    if (storedProjectId) {
+      project_id = storedProjectId;
+    } else {
+      localStorage.setItem("project_id", project_id as string);
+    }
+  }
 
   const apiUrl = `http://localhost:5000/jira/search/${project_id}?page=${currentPage}`;
 
@@ -54,6 +64,8 @@ const Project: FC<ProjectProps> = ({}) => {
           totalInProgress,
           totalCustomerApproval,
         });
+
+        localStorage.setItem("project_id", project_id as string);
       } catch (error) {
         setError(error);
       }
