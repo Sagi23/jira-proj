@@ -18,12 +18,26 @@ const ProjectCard: FC<ProjectCardProps> = ({
   categoryName,
 }) => {
   return (
-    <div className="flex align-middle justify-center p-4 w-64 h-60 border border-black ">
-      <Link href="/projects/[id]" as={`/projects/${id}`} className="w-full">
-        <img src={image} alt={name} width={48} height={48} className="m-auto" />
-        <p className="text-center underline text-blue-600  m-4">{name}</p>
-        <p>Key: {jiraKey}</p>
-        {categoryName && <p>Category: {categoryName}</p>}
+    <div className="flex align-middle justify-center w-64 h-60 border border-gray-400 bg-white p-5 rounded-lg">
+      <Link
+        href="/projects/[id]"
+        as={`/projects/${id}`}
+        className="w-full flex flex-col justify-between"
+      >
+        <div>
+          <img
+            src={image}
+            alt={name}
+            width={48}
+            height={48}
+            className="m-auto"
+          />
+          <p className="text-center underline text-blue-600 mt-4">{name}</p>
+        </div>
+        <div>
+          <p>Key: {jiraKey}</p>
+          {categoryName && <p>Category: {categoryName}</p>}
+        </div>
       </Link>
     </div>
   );
