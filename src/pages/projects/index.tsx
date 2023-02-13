@@ -9,9 +9,8 @@ import "../../app/globals.css";
 const Projects: NextPage = () => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<Error | null | any>(null);
-  const [currentPage, setCurrentPage] = useState<number>(2);
 
-  const apiUrl = `http://localhost:5000/jira/project?page=${currentPage}`;
+  const apiUrl = `http://localhost:5000/jira/project`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +52,7 @@ const Projects: NextPage = () => {
   console.log(typeof data);
   console.log(data);
   return (
-    <div>
+    <div className="pb-24">
       <h1 className="text-center text-4xl font-semibold mt-12">All Projects</h1>
       <div className="w-3/4 mx-auto mt-12">
         <div className="flex gap-5 flex-wrap justify-center">

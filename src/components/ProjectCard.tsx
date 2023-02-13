@@ -32,7 +32,9 @@ const ProjectCard: FC<ProjectCardProps> = ({
             height={48}
             className="m-auto"
           />
-          <p className="text-center underline text-blue-600 mt-4">{name}</p>
+          <p className="text-center text-lg underline text-blue-600 mt-4">
+            {name}
+          </p>
         </div>
         <div>
           <p>Key: {jiraKey}</p>
