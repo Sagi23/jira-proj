@@ -1,6 +1,8 @@
 import ProjectCard from "@/components/ProjectCard";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
+import Loader from "@/components/Loader";
+import "../../app/globals.css";
 
 // const jql = encodeURIComponent("project=PHD&startAt=0&maxResults=1");
 
@@ -42,29 +44,30 @@ const Projects: NextPage = () => {
   }
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <Loader />;
+  }
+
+  if (data) {
+    console.log(data.map((proj: any) => proj.projectCategory?.name));
   }
   console.log(typeof data);
   console.log(data);
   return (
-    <div>
-      <div>
-        <h3>{data && data.total}</h3>
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-          {data &&
-            data.map((proj: any) => (
-              <div key={proj.key}>
-                <ProjectCard
-                  key={proj.id}
-                  name={proj.name}
-                  jiraKey={proj.key}
-                  totalIssues={40}
-                  image={proj.avatarUrls["48x48"]}
-                  id={proj.id}
-                />
-              </div>
-            ))}
-        </div>
+    <div className="w-3/4 mx-auto mt-12">
+      <div className="flex gap-5 flex-wrap justify-center">
+        {data &&
+          data.map((proj: any) => (
+            <div key={proj.key}>
+              <ProjectCard
+                key={proj.id}
+                name={proj.name}
+                jiraKey={proj.key}
+                categoryName={proj.projectCategory?.name}
+                image={proj.avatarUrls["48x48"]}
+                id={proj.id}
+              />
+            </div>
+          ))}
       </div>
     </div>
   );

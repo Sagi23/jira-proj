@@ -1,5 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import "../../app/globals.css";
+import Loader from "@/components/Loader";
 
 interface ProjectProps {}
 
@@ -9,93 +11,90 @@ const Project: FC<ProjectProps> = ({}) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const router = useRouter();
-
   let { id: project_id } = router.query;
-
-  if (typeof window !== "undefined" && window.localStorage) {
-    const storedProjectId = localStorage.getItem("project_id");
-    if (storedProjectId) {
-      project_id = storedProjectId;
-    } else {
-      localStorage.setItem("project_id", project_id as string);
-    }
-  }
 
   const apiUrl = `http://localhost:5000/jira/search/${project_id}?page=${currentPage}`;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic " + btoa("sagi.twig:St123369"),
-          },
-        });
+        if (project_id !== undefined) {
+          const response = await fetch(apiUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Basic " + btoa("sagi.twig:St123369"),
+            },
+          });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch data from Jira API");
+          if (!response.ok) {
+            throw new Error("Failed to fetch data from Jira API");
+          }
+
+          const jsonData = await response.json();
+          const parsedData = JSON.parse(jsonData.data);
+          const totalIssues = jsonData.total_issues;
+          const totalBlocker = jsonData.total_blocker;
+          const totalCritical = jsonData.total_critical;
+          const totalMajor = jsonData.total_major;
+          const totalMinor = jsonData.total_minor;
+          const totalCosmetic = jsonData.total_cosmetic;
+          const totalOpen = jsonData.total_open;
+          const totalClosed = jsonData.total_closed;
+          const totalreopened = jsonData.total_reopened;
+          const totalInProgress = jsonData.total_in_progress;
+          const totalCustomerApproval = jsonData.total_customer_approval;
+          const projectName = jsonData.project_name;
+
+          setData({
+            ...parsedData,
+            totalIssues,
+            totalBlocker,
+            totalCritical,
+            totalMajor,
+            totalMinor,
+            totalOpen,
+            totalClosed,
+            totalreopened,
+            totalInProgress,
+            totalCustomerApproval,
+            totalCosmetic,
+            projectName,
+          });
+
+          localStorage.setItem("project_id", project_id as string);
         }
-
-        const jsonData = await response.json();
-        const parsedData = JSON.parse(jsonData.data);
-        const totalIssues = jsonData.total_issues;
-        const totalBlocker = jsonData.total_blocker;
-        const totalCritical = jsonData.total_critical;
-        const totalMajor = jsonData.total_major;
-        const totalMinor = jsonData.total_minor;
-        const totalOpen = jsonData.total_open;
-        const totalClosed = jsonData.total_closed;
-        const totalreopened = jsonData.total_reopened;
-        const totalInProgress = jsonData.total_in_progress;
-        const totalCustomerApproval = jsonData.total_customer_approval;
-
-        setData({
-          ...parsedData,
-          totalIssues,
-          totalBlocker,
-          totalCritical,
-          totalMajor,
-          totalMinor,
-          totalOpen,
-          totalClosed,
-          totalreopened,
-          totalInProgress,
-          totalCustomerApproval,
-        });
-
-        localStorage.setItem("project_id", project_id as string);
       } catch (error) {
         setError(error);
       }
     };
-
     fetchData();
-  }, []);
+  }, [apiUrl]);
 
   if (error) {
     return <div>An error occurred: {error.message}</div>;
   }
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
   console.log(data);
   return (
     <div>
+      <h1>{data.projectName}</h1>
       <div>
-        <h3>{data && data.totalIssues}</h3>
-        <h3>{data && data.totalBlocker}</h3>
-        <h3>{data && data.totalCritical}</h3>
-        <h3>{data && data.totalMajor}</h3>
-        <h3>{data && data.totalMinor}</h3>
+        <p>{data.totalIssues}</p>
+        <p>{data.totalBlocker}</p>
+        <p>{data.totalCritical}</p>
+        <p>{data.totalMajor}</p>
+        <p>{data.totalMinor}</p>
+        <p>{data.totalCosmetic}</p>
         <br />
-        <h3>{data && data.totalOpen}</h3>
-        <h3>{data && data.totalClosed}</h3>
-        <h3>{data && data.totalreopened}</h3>
-        <h3>{data && data.totalInProgress}</h3>
-        <h3>{data && data.totalCustomerApproval}</h3>
+        <p>{data.totalOpen}</p>
+        <p>{data.totalClosed}</p>
+        <p>{data.totalreopened}</p>
+        <p>{data.totalInProgress}</p>
+        <p>{data.totalCustomerApproval}</p>
         <ul>
           {data && data.issues ? (
             data.issues.map((issue: any) => (
