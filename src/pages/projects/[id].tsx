@@ -127,7 +127,7 @@ const Project: FC<ProjectProps> = ({}) => {
         <div>
           <div className="h-min max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
             <h2 className="text-2xl font-semibold">Severity Summary</h2>
-            <div className="sm:flex sm:space-x-4">
+            <div className="sm:flex sm:gap-4 sm:flex-wrap lg:flex-nowrap">
               <HighlightCard
                 amount={data.total}
                 title="Total Issues"
@@ -162,7 +162,7 @@ const Project: FC<ProjectProps> = ({}) => {
           </div>
           <div className="h-min max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
             <h2 className="text-2xl font-semibold">Resultion Summary</h2>
-            <div className="sm:flex sm:space-x-4">
+            <div className="sm:flex sm:space-x-4 sm:flex-wrap lg:flex-nowrap">
               <HighlightCard
                 amount={data.totalOpen}
                 title="Total Open"

@@ -18,7 +18,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
   categoryName,
 }) => {
   return (
-    <div className="flex align-middle justify-center w-64 h-60 border border-gray-400 bg-white p-5 rounded-lg">
+    <div className="flex align-middle justify-center w-64 h-60 border border-gray-200 shadow bg-white p-5 rounded-lg hover:bg-gray-100">
       <Link
         href="/projects/[id]"
         as={`/projects/${id}`}

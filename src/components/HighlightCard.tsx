@@ -11,7 +11,7 @@ const HighlightCard: FC<HighlightCardProps> = ({ amount, title, total }) => {
     ((num / sum) * 100).toFixed(2);
 
   return (
-    <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow transform transition-all mb-4 w-full sm:w-1/3 sm:my-8">
+    <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow transform transition-all mb-4 w-full sm:w-1/4 sm:my-8">
       <div className="bg-white p-5">
         <div className="sm:flex sm:items-end sm:justify-between">
           <div className="text-center sm:mt-0 sm:ml-2 sm:text-left">
