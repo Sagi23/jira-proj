@@ -5,6 +5,7 @@ import Loader from "@/components/Loader";
 import HighlightCard from "@/components/HighlightCard";
 import IssuesTable from "@/components/IssuesTable";
 import TableWrapper from "@/components/TableWrapper";
+import SeveritySelect from "@/components/SeveritySelect";
 
 interface ProjectProps {}
 
@@ -12,11 +13,16 @@ const Project: FC<ProjectProps> = ({}) => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<Error | null | any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [severity, setSeverity] = useState<string>("All");
 
   const router = useRouter();
   let { id: project_id } = router.query;
 
-  const apiUrl = `http://localhost:5000/jira/search/${project_id}?page=${currentPage}`;
+  // let apiUrl = `http://localhost:5000/jira/search/${project_id}?page=${currentPage}`;
+
+  const apiUrl = `http://localhost:5000/jira/search/${project_id}/${severity}?page=${currentPage}`;
+  if (severity) {
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,7 +78,7 @@ const Project: FC<ProjectProps> = ({}) => {
       }
     };
     fetchData();
-  }, [apiUrl]);
+  }, [apiUrl, severity]);
 
   if (error) {
     return <div>An error occurred: {error.message}</div>;
@@ -82,7 +88,7 @@ const Project: FC<ProjectProps> = ({}) => {
     return <Loader />;
   }
 
-  console.log(data);
+  console.log(data, severity);
   return (
     <>
       <div className="w-3/4 mx-auto mt-12 mb-20">
@@ -126,7 +132,8 @@ const Project: FC<ProjectProps> = ({}) => {
             </div>
           </div>
           <div className="h-min max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-semibold">Resultion Summary</h2>
+            <h2 className="text-2xl font-semibold mb-6">Resultion Summary</h2>
+            <SeveritySelect setSeverity={setSeverity} />
             <div className="sm:flex sm:space-x-4 sm:flex-wrap lg:flex-nowrap">
               <HighlightCard
                 amount={data.totalOpen}
