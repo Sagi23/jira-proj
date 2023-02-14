@@ -27,7 +27,8 @@ const IssuesTable: FC<IssuesTableProps> = ({
         <td className="px-6 py-4">{severity}</td>
         <td className="px-6 py-4 text-right">
           <a
-            href={`https://jira-soft.ngsoft.com/issue/${issueId}`}
+            href={`https://jira-soft.ngsoft.com/browse/${issueId}`}
+            target="_blank"
             className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
           >
             Link

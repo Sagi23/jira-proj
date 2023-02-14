@@ -4,6 +4,7 @@ import "../../app/globals.css";
 import Loader from "@/components/Loader";
 import HighlightCard from "@/components/HighlightCard";
 import IssuesTable from "@/components/IssuesTable";
+import TableWrapper from "@/components/TableWrapper";
 
 interface ProjectProps {}
 
@@ -11,7 +12,6 @@ const Project: FC<ProjectProps> = ({}) => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<Error | null | any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [highlightData, setHighlightData] = useState<any[]>([]);
 
   const router = useRouter();
   let { id: project_id } = router.query;
@@ -81,41 +81,6 @@ const Project: FC<ProjectProps> = ({}) => {
   if (!data) {
     return <Loader />;
   }
-
-  // if (data) {
-  //   setHighlightData([
-  //     {
-  //       amount: data.total,
-  //       title: "Total Issues",
-  //       total: data.total,
-  //     },
-  //     {
-  //       amount: data.totalBlocker,
-  //       title: "Total Blockers",
-  //       total: data.total,
-  //     },
-  //     {
-  //       amount: data.totalCritical,
-  //       title: "Total Criticals",
-  //       total: data.total,
-  //     },
-  //     {
-  //       amount: data.totalMajor,
-  //       title: "Total Majors",
-  //       total: data.total,
-  //     },
-  //     {
-  //       amount: data.totalMinor,
-  //       title: "Total Minors",
-  //       total: data.total,
-  //     },
-  //     {
-  //       amount: data.totalCosmetic,
-  //       title: "Total Cosemtics",
-  //       total: data.total,
-  //     },
-  //   ]);
-  // }
 
   console.log(data);
   return (
@@ -190,44 +155,21 @@ const Project: FC<ProjectProps> = ({}) => {
               />
             </div>
           </div>
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Key
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Type
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Summary
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Severity
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  <a href={`#`} className="sr-only">
-                    Link
-                  </a>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data && data.issues ? (
-                data.issues.map((issue: any) => (
-                  <IssuesTable
-                    key={issue.key}
-                    issueId={issue.key}
-                    type={issue.fields.issuetype?.name}
-                    summary={issue.fields.summary}
-                    severity={issue.fields.customfield_10200?.value}
-                  />
-                ))
-              ) : (
-                <p>No data available</p>
-              )}
-            </tbody>
-          </table>
+          <TableWrapper>
+            {data && data.issues ? (
+              data.issues.map((issue: any) => (
+                <IssuesTable
+                  key={issue.key}
+                  issueId={issue.key}
+                  type={issue.fields.issuetype?.name}
+                  summary={issue.fields.summary}
+                  severity={issue.fields.customfield_10200?.value}
+                />
+              ))
+            ) : (
+              <p>No data available</p>
+            )}
+          </TableWrapper>
         </div>
       </div>
     </>
