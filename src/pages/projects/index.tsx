@@ -56,19 +56,18 @@ const Projects: NextPage = () => {
       <h1 className="text-center text-4xl font-semibold mt-12">All Projects</h1>
       <div className="w-3/4 mx-auto mt-12">
         <div className="flex gap-5 flex-wrap justify-center">
-          {data &&
-            data.map((proj: any) => (
-              <div key={proj.key}>
-                <ProjectCard
-                  key={proj.id}
-                  name={proj.name}
-                  jiraKey={proj.key}
-                  categoryName={proj.projectCategory?.name}
-                  image={proj.avatarUrls["48x48"]}
-                  id={proj.id}
-                />
-              </div>
-            ))}
+          {data?.map((proj: any) => (
+            <div key={proj.key}>
+              <ProjectCard
+                key={proj.id}
+                name={proj.name}
+                jiraKey={proj.key}
+                categoryName={proj.projectCategory?.name}
+                image={proj.avatarUrls["48x48"]}
+                id={proj.id}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

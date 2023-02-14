@@ -163,7 +163,7 @@ const Project: FC<ProjectProps> = ({}) => {
             </div>
           </div>
           <TableWrapper>
-            {data && data.issues ? (
+            {data?.issues ? (
               data.issues.map((issue: any) => (
                 <IssuesTable
                   key={issue.key}
