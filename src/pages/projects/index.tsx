@@ -19,7 +19,6 @@ const Projects: NextPage = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Basic " + btoa("sagi.twig:St123369"),
           },
         });
 

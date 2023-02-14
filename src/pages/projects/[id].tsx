@@ -18,8 +18,6 @@ const Project: FC<ProjectProps> = ({}) => {
   const router = useRouter();
   let { id: project_id } = router.query;
 
-  // let apiUrl = `http://localhost:5000/jira/search/${project_id}?page=${currentPage}`;
-
   const apiUrl = `http://localhost:5000/jira/search/${project_id}/${severity}?page=${currentPage}`;
   if (severity) {
   }
@@ -32,7 +30,6 @@ const Project: FC<ProjectProps> = ({}) => {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: "Basic " + btoa("sagi.twig:St123369"),
             },
           });
 
