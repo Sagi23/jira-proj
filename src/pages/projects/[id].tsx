@@ -136,7 +136,7 @@ const Project: FC<ProjectProps> = ({}) => {
           {isLoading && <Loader />}
           <div className="h-min max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
             <h2 className="text-2xl font-semibold mb-6">Resultion Summary</h2>
-            <SeveritySelect setSeverity={setSeverity} />
+            <SeveritySelect setSeverity={setSeverity} isLoading={isLoading} />
             <div className="sm:flex sm:space-x-4 sm:flex-wrap lg:flex-nowrap">
               <HighlightCard
                 amount={data.totalOpen}

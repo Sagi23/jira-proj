@@ -2,6 +2,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 
 interface SeveritySelectProps {
   setSeverity: Dispatch<SetStateAction<string>>;
+  isLoading: boolean;
 }
 
 const severityList = [
@@ -13,7 +14,10 @@ const severityList = [
   "Cosmetic",
 ];
 
-const SeveritySelect: FC<SeveritySelectProps> = ({ setSeverity }) => {
+const SeveritySelect: FC<SeveritySelectProps> = ({
+  setSeverity,
+  isLoading,
+}) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSeverity(e.target.value);
   };
@@ -27,9 +31,10 @@ const SeveritySelect: FC<SeveritySelectProps> = ({ setSeverity }) => {
         Select a Severity
       </label>
       <select
+        disabled={isLoading}
         onChange={handleChange}
         id="severity"
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/3 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/3 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 disabled:hover:cursor-not-allowed"
       >
         {severityList.map((s, index) => (
           <option key={index} value={s}>
