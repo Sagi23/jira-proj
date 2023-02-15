@@ -10,7 +10,10 @@ const Projects: NextPage = () => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<Error | null | any>(null);
 
-  const apiUrl = `http://localhost:5000/jira/project`;
+  const auth =
+    typeof window !== "undefined" ? localStorage.getItem("auth") : null;
+
+  const apiUrl = `http://localhost:5000/jira/project/${auth}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,11 +48,6 @@ const Projects: NextPage = () => {
     return <Loader />;
   }
 
-  if (data) {
-    console.log(data.map((proj: any) => proj.projectCategory?.name));
-  }
-  console.log(typeof data);
-  console.log(data);
   return (
     <div className="pb-24">
       <h1 className="text-center text-4xl font-semibold mt-12">All Projects</h1>

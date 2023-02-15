@@ -5,7 +5,7 @@ interface LoaderProps {}
 
 const Loader: FC<LoaderProps> = ({}) => {
   return (
-    <div role="status" className="fixed top-1/2 left-1/2">
+    <div role="status" className="fixed z-50 top-1/2 left-1/2">
       <svg
         aria-hidden="true"
         className="w-16 h-16 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"

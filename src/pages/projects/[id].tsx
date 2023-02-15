@@ -14,18 +14,21 @@ const Project: FC<ProjectProps> = ({}) => {
   const [error, setError] = useState<Error | null | any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [severity, setSeverity] = useState<string>("All");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const auth =
+    typeof window !== "undefined" ? localStorage.getItem("auth") : null;
 
   const router = useRouter();
   let { id: project_id } = router.query;
 
-  const apiUrl = `http://localhost:5000/jira/search/${project_id}/${severity}?page=${currentPage}`;
-  if (severity) {
-  }
+  const apiUrl = `http://localhost:5000/jira/search/${project_id}/${severity}/${auth}?page=${currentPage}`;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (project_id !== undefined) {
+          setIsLoading(true);
           const response = await fetch(apiUrl, {
             method: "GET",
             headers: {
@@ -67,7 +70,7 @@ const Project: FC<ProjectProps> = ({}) => {
             totalCosmetic,
             projectName,
           });
-
+          setIsLoading(false);
           localStorage.setItem("project_id", project_id as string);
         }
       } catch (error) {
@@ -84,8 +87,6 @@ const Project: FC<ProjectProps> = ({}) => {
   if (!data) {
     return <Loader />;
   }
-
-  console.log(data, severity);
   return (
     <>
       <div className="w-3/4 mx-auto mt-12 mb-20">
@@ -128,6 +129,7 @@ const Project: FC<ProjectProps> = ({}) => {
               />
             </div>
           </div>
+          {isLoading && <Loader />}
           <div className="h-min max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
             <h2 className="text-2xl font-semibold mb-6">Resultion Summary</h2>
             <SeveritySelect setSeverity={setSeverity} />

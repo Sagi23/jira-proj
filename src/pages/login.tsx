@@ -7,21 +7,20 @@ interface loginProps {}
 const Login: FC<loginProps> = ({}) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [auth, setAuth] = useState<string>("");
 
   const router = useRouter();
 
-  console.log(username);
-
   const handleSubmit = (e: any) => {
     e.preventDefault();
+
     fetch("http://localhost:5000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: username,
-        password: password,
+        auth: btoa(`${username}:${password}`),
       }),
     })
       .then((response) => {
@@ -34,6 +33,10 @@ const Login: FC<loginProps> = ({}) => {
       .then((data) => {
         if (data.success) {
           console.log("Login successful!", data);
+          if (username && password) {
+            setAuth(btoa(`${username}:${password}`));
+          }
+
           router.push("/projects");
         } else {
           console.log("Login Unsuccessful!", data);
@@ -46,6 +49,10 @@ const Login: FC<loginProps> = ({}) => {
         // Handle login error, such as displaying an error message to the user
       });
   };
+
+  if (username && password) {
+    localStorage.setItem("auth", auth);
+  }
 
   return (
     <div className="h-screen">
