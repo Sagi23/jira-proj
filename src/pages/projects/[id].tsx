@@ -25,6 +25,9 @@ const Project: FC<ProjectProps> = ({}) => {
   const apiUrl = `http://localhost:5000/jira/search/${project_id}/${severity}/${auth}?page=${currentPage}`;
 
   useEffect(() => {
+    if (!auth) {
+      router.push("/login");
+    }
     const fetchData = async () => {
       try {
         if (project_id !== undefined) {

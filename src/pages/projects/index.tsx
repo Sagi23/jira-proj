@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import "../../app/globals.css";
+import { useRouter } from "next/router";
 
 // const jql = encodeURIComponent("project=PHD&startAt=0&maxResults=1");
 
@@ -10,12 +11,17 @@ const Projects: NextPage = () => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<Error | null | any>(null);
 
+  const router = useRouter();
+
   const auth =
     typeof window !== "undefined" ? localStorage.getItem("auth") : null;
 
   const apiUrl = `http://localhost:5000/jira/project/${auth}`;
 
   useEffect(() => {
+    if (!auth) {
+      router.push("/login");
+    }
     const fetchData = async () => {
       try {
         const response = await fetch(apiUrl, {
