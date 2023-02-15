@@ -6,6 +6,7 @@ import HighlightCard from "@/components/HighlightCard";
 import IssuesTable from "@/components/IssuesTable";
 import TableWrapper from "@/components/TableWrapper";
 import SeveritySelect from "@/components/SeveritySelect";
+import Pagination from "@/components/Pagination";
 
 interface ProjectProps {}
 
@@ -81,7 +82,7 @@ const Project: FC<ProjectProps> = ({}) => {
       }
     };
     fetchData();
-  }, [apiUrl, severity]);
+  }, [apiUrl, severity, currentPage]);
 
   if (error) {
     return <div>An error occurred: {error.message}</div>;
@@ -180,6 +181,12 @@ const Project: FC<ProjectProps> = ({}) => {
             )}
           </TableWrapper>
         </div>
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalIssues={data.total}
+          isLoading={isLoading}
+        />
       </div>
     </>
   );
