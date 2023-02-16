@@ -17,34 +17,40 @@ const Projects: NextPage = () => {
   const auth =
     typeof window !== "undefined" ? localStorage.getItem("auth") : null;
 
+  const projectsData =
+    typeof window !== "undefined" ? localStorage.getItem("projectsData") : null;
+
   const apiUrl = `http://localhost:5000/jira/project/${auth}`;
 
   useEffect(() => {
     if (!auth) {
       router.push("/login");
     }
-    const fetchData = async () => {
-      try {
-        const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+    if (!projectsData) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(apiUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch data from Jira API");
+          if (!response.ok) {
+            throw new Error("Failed to fetch data from Jira API");
+          }
+
+          const jsonData = await response.json();
+
+          setData(jsonData);
+        } catch (error) {
+          setError(error);
         }
-
-        const jsonData = await response.json();
-
-        setData(jsonData);
-      } catch (error) {
-        setError(error);
-      }
-    };
-
-    fetchData();
+      };
+      fetchData();
+    } else {
+      setData(JSON.parse(projectsData));
+    }
   }, []);
 
   if (error) {
@@ -53,6 +59,10 @@ const Projects: NextPage = () => {
 
   if (!data) {
     return <Loader />;
+  }
+
+  if (data && !projectsData) {
+    localStorage.setItem("projectsData", JSON.stringify(data));
   }
 
   return (

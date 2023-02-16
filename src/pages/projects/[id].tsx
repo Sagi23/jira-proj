@@ -30,6 +30,12 @@ const Project: FC<ProjectProps> = ({}) => {
     if (!auth) {
       router.push("/login");
     }
+    if (
+      typeof project_id === "string" &&
+      project_id !== project_id.toUpperCase()
+    ) {
+      router.replace(`/projects/${project_id.toUpperCase()}`);
+    }
     const fetchData = async () => {
       try {
         if (project_id !== undefined) {
@@ -83,7 +89,16 @@ const Project: FC<ProjectProps> = ({}) => {
       }
     };
     fetchData();
-  }, [apiUrl, severity, currentPage]);
+  }, [apiUrl, severity, currentPage, project_id]);
+
+  const projectsData =
+    typeof window !== "undefined" ? localStorage.getItem("projectsData") : null;
+
+  const currentProject =
+    projectsData &&
+    JSON.parse(projectsData)?.find(
+      (p: { key: string | string[] | undefined }) => p.key === project_id
+    );
 
   if (error) {
     return <div>An error occurred: {error.message}</div>;
@@ -100,7 +115,7 @@ const Project: FC<ProjectProps> = ({}) => {
       </Head>
       <div className="w-3/4 mx-auto mt-12 mb-20">
         <h1 className="text-4xl text-center font-semibold mb-12">
-          {data.projectName}
+          {currentProject?.name}
         </h1>
         <div>
           <div className="h-min max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
