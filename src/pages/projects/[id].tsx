@@ -7,6 +7,7 @@ import IssuesTable from "@/components/IssuesTable";
 import TableWrapper from "@/components/TableWrapper";
 import SeveritySelect from "@/components/SeveritySelect";
 import Pagination from "@/components/Pagination";
+import Head from "next/head";
 
 interface ProjectProps {}
 
@@ -21,7 +22,7 @@ const Project: FC<ProjectProps> = ({}) => {
     typeof window !== "undefined" ? localStorage.getItem("auth") : null;
 
   const router = useRouter();
-  let { id: project_id } = router.query;
+  const { id: project_id } = router.query;
 
   const apiUrl = `http://localhost:5000/jira/search/${project_id}/${severity}/${auth}?page=${currentPage}`;
 
@@ -93,6 +94,10 @@ const Project: FC<ProjectProps> = ({}) => {
   }
   return (
     <>
+      <Head>
+        <title>{data.projectName}</title>
+        <meta property="og:title" content={data.projectName} key="title" />
+      </Head>
       <div className="w-3/4 mx-auto mt-12 mb-20">
         <h1 className="text-4xl text-center font-semibold mb-12">
           {data.projectName}

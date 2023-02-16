@@ -18,8 +18,8 @@ const Pagination: FC<PaginationProps> = ({
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage - 1, totalIssues - 1);
 
-  const displayStart = startIndex + 1;
   const displayEnd = endIndex + 1;
+  const displayStart = displayEnd !== 0 ? startIndex + 1 : 0;
 
   return (
     <div className="mt-6">

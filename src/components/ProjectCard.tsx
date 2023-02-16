@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Link from "next/link";
 import "../app/globals.css";
 
@@ -7,21 +7,19 @@ interface ProjectCardProps {
   jiraKey: string;
   image: string;
   categoryName: string;
-  id: number;
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
   name,
   jiraKey,
   image,
-  id,
   categoryName,
 }) => {
   return (
     <div className="flex align-middle justify-center w-64 h-60 border border-gray-200 shadow bg-white p-5 rounded-lg hover:bg-gray-100">
       <Link
         href="/projects/[id]"
-        as={`/projects/${id}`}
+        as={`/projects/${jiraKey}`}
         className="w-full flex flex-col justify-between"
       >
         <div>

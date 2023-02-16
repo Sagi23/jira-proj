@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import "../../app/globals.css";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 // const jql = encodeURIComponent("project=PHD&startAt=0&maxResults=1");
 
@@ -55,25 +56,32 @@ const Projects: NextPage = () => {
   }
 
   return (
-    <div className="pb-24">
-      <h1 className="text-center text-4xl font-semibold mt-12">All Projects</h1>
-      <div className="w-3/4 mx-auto mt-12">
-        <div className="flex gap-5 flex-wrap justify-center">
-          {data?.map((proj: any) => (
-            <div key={proj.key}>
-              <ProjectCard
-                key={proj.id}
-                name={proj.name}
-                jiraKey={proj.key}
-                categoryName={proj.projectCategory?.name}
-                image={proj.avatarUrls["48x48"]}
-                id={proj.id}
-              />
-            </div>
-          ))}
+    <>
+      <Head>
+        <title>All Projects</title>
+        <meta property="og:title" content="All Projects" key="title" />
+      </Head>
+      <div className="pb-24">
+        <h1 className="text-center text-4xl font-semibold mt-12">
+          All Projects
+        </h1>
+        <div className="w-3/4 mx-auto mt-12">
+          <div className="flex gap-5 flex-wrap justify-center">
+            {data?.map((proj: any) => (
+              <div key={proj.key}>
+                <ProjectCard
+                  key={proj.id}
+                  name={proj.name}
+                  jiraKey={proj.key}
+                  categoryName={proj.projectCategory?.name}
+                  image={proj.avatarUrls["48x48"]}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

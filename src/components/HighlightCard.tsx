@@ -20,7 +20,10 @@ const HighlightCard: FC<HighlightCardProps> = ({ amount, title, total }) => {
             </h3>
             <p className="text-3xl font-bold text-black">{amount}</p>
           </div>
-          <div>{amount !== total && percentage(total, amount) + "%"}</div>
+          <div>
+            {amount !== total ||
+              (amount !== 0 && percentage(total, amount) + "%")}
+          </div>
         </div>
       </div>
     </div>
