@@ -122,34 +122,34 @@ const Project: FC<ProjectProps> = ({}) => {
             <h2 className="text-2xl font-semibold">Severity Summary</h2>
             <div className="sm:flex sm:gap-4 sm:flex-wrap lg:flex-nowrap">
               <HighlightCard
-                amount={data.total}
+                amount={data.totalIssues}
                 title="Total Issues"
-                total={data.total}
+                total={data.totalIssues}
               />
               <HighlightCard
                 amount={data.totalBlocker}
                 title="Total Blockers"
-                total={data.total}
+                total={data.totalIssues}
               />
               <HighlightCard
                 amount={data.totalCritical}
                 title="Total Criticals"
-                total={data.total}
+                total={data.totalIssues}
               />
               <HighlightCard
                 amount={data.totalMajor}
                 title="Total Majors"
-                total={data.total}
+                total={data.totalIssues}
               />
               <HighlightCard
                 amount={data.totalMinor}
                 title="Total Minors"
-                total={data.total}
+                total={data.totalIssues}
               />
               <HighlightCard
                 amount={data.totalCosmetic}
                 title="Total Cosemtic"
-                total={data.total}
+                total={data.totalIssues}
               />
             </div>
           </div>
