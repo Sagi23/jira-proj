@@ -5,6 +5,7 @@ import Loader from "@/components/Loader";
 import "../../app/globals.css";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import Navbar from "@/components/Navbar";
 
 // const jql = encodeURIComponent("project=PHD&startAt=0&maxResults=1");
 
@@ -71,12 +72,13 @@ const Projects: NextPage = () => {
         <title>All Projects</title>
         <meta property="og:title" content="All Projects" key="title" />
       </Head>
+      <Navbar />
       <div className="pb-24">
         <h1 className="text-center text-4xl font-semibold mt-12">
           All Projects
         </h1>
         <div className="w-3/4 mx-auto mt-12">
-          <div className="flex gap-5 flex-wrap justify-center">
+          <div className="flex gap-5 flex-wrap justify-center md:justify-between">
             {data?.map((proj: any) => (
               <div key={proj.key}>
                 <ProjectCard

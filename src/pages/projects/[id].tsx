@@ -8,6 +8,7 @@ import TableWrapper from "@/components/TableWrapper";
 import SeveritySelect from "@/components/SeveritySelect";
 import Pagination from "@/components/Pagination";
 import Head from "next/head";
+import Navbar from "@/components/Navbar";
 
 interface ProjectProps {}
 
@@ -113,12 +114,13 @@ const Project: FC<ProjectProps> = ({}) => {
         <title>{data.projectName}</title>
         <meta property="og:title" content={data.projectName} key="title" />
       </Head>
+      <Navbar />
       <div className="w-3/4 mx-auto mt-12 mb-20">
         <h1 className="text-4xl text-center font-semibold mb-12">
           {currentProject?.name}
         </h1>
         <div>
-          <div className="h-min max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
+          <div className="h-min max-w-full mx-4 py-6 sm:mx-auto">
             <h2 className="text-2xl font-semibold">Severity Summary</h2>
             <div className="sm:flex sm:gap-4 sm:flex-wrap lg:flex-nowrap">
               <HighlightCard
@@ -154,7 +156,7 @@ const Project: FC<ProjectProps> = ({}) => {
             </div>
           </div>
           {isLoading && <Loader />}
-          <div className="h-min max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
+          <div className="h-min max-w-full mx-4 py-6 sm:mx-auto">
             <h2 className="text-2xl font-semibold mb-6">Resultion Summary</h2>
             <SeveritySelect setSeverity={setSeverity} isLoading={isLoading} />
             <div className="sm:flex sm:space-x-4 sm:flex-wrap lg:flex-nowrap">
