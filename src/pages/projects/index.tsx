@@ -6,6 +6,7 @@ import "../../app/globals.css";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
+import { baseURL, getLocalStorageData } from "@/helper";
 
 // const jql = encodeURIComponent("project=PHD&startAt=0&maxResults=1");
 
@@ -15,20 +16,25 @@ const Projects: NextPage = () => {
 
   const router = useRouter();
 
-  const auth =
-    typeof window !== "undefined" ? localStorage.getItem("auth") : null;
+  const auth = getLocalStorageData("auth");
 
-  const projectsData =
-    typeof window !== "undefined" ? localStorage.getItem("projectsData") : null;
+  const projectsData = getLocalStorageData("projectsData");
 
-  const apiUrl = `http://localhost:5000/jira/project/${auth}`;
+  // ToDo: change getTime to getDate
+  const currentDate = new Date().getDate().toString();
+
+  const projectsDataDate = getLocalStorageData("projectsDataDate");
+
+  const apiUrl = `${baseURL}/project/${auth}`;
 
   useEffect(() => {
     if (!auth) {
       router.push("/login");
     }
-    if (!projectsData) {
+    if (!projectsData || projectsDataDate !== currentDate) {
       const fetchData = async () => {
+        console.log("inside");
+
         try {
           const response = await fetch(apiUrl, {
             method: "GET",
@@ -62,8 +68,9 @@ const Projects: NextPage = () => {
     return <Loader />;
   }
 
-  if (data && !projectsData) {
+  if ((data && !projectsData) || projectsDataDate !== currentDate) {
     localStorage.setItem("projectsData", JSON.stringify(data));
+    localStorage.setItem("projectsDataDate", currentDate);
   }
 
   return (

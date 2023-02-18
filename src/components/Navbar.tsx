@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import SearchResults from "./SearchResults";
 import Link from "next/link";
+import { getLocalStorageData } from "@/helper";
 
 interface NavbarProps {}
 
@@ -8,7 +9,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
   const [term, setTerm] = useState("");
   const [isActive, setIsActive] = useState(false);
 
-  const projectsData = localStorage.getItem("projectsData");
+  const projectsData = getLocalStorageData("projectsData");
 
   const projectsDataJson =
     typeof window !== "undefined" && projectsData

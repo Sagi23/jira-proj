@@ -9,8 +9,12 @@ import SeveritySelect from "@/components/SeveritySelect";
 import Pagination from "@/components/Pagination";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
+import { baseURL, getLocalStorageData } from "@/helper";
+import HighlightCardWrapper from "@/components/HighlightCardWrapper";
 
 interface ProjectProps {}
+
+const auth = getLocalStorageData("auth");
 
 const Project: FC<ProjectProps> = ({}) => {
   const [data, setData] = useState<any>(null);
@@ -19,13 +23,10 @@ const Project: FC<ProjectProps> = ({}) => {
   const [severity, setSeverity] = useState<string>("All");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const auth =
-    typeof window !== "undefined" ? localStorage.getItem("auth") : null;
-
   const router = useRouter();
   const { id: project_id } = router.query;
 
-  const apiUrl = `http://localhost:5000/jira/search/${project_id}/${severity}/${auth}?page=${currentPage}`;
+  const apiUrl = `${baseURL}/search/${project_id}/${severity}/${auth}?page=${currentPage}`;
 
   useEffect(() => {
     if (!auth) {
@@ -92,8 +93,7 @@ const Project: FC<ProjectProps> = ({}) => {
     fetchData();
   }, [apiUrl, severity, currentPage, project_id]);
 
-  const projectsData =
-    typeof window !== "undefined" ? localStorage.getItem("projectsData") : null;
+  const projectsData = getLocalStorageData("projectsData");
 
   const currentProject =
     projectsData &&
@@ -120,8 +120,7 @@ const Project: FC<ProjectProps> = ({}) => {
           {currentProject?.name}
         </h1>
         <div>
-          <div className="h-min max-w-full mx-4 py-6 sm:mx-auto">
-            <h2 className="text-2xl font-semibold">Severity Summary</h2>
+          <HighlightCardWrapper title="Severity Summary">
             <div className="sm:flex sm:gap-4 sm:flex-wrap lg:flex-nowrap">
               <HighlightCard
                 amount={data.totalIssues}
@@ -154,10 +153,9 @@ const Project: FC<ProjectProps> = ({}) => {
                 total={data.totalIssues}
               />
             </div>
-          </div>
+          </HighlightCardWrapper>
           {isLoading && <Loader />}
-          <div className="h-min max-w-full mx-4 py-6 sm:mx-auto">
-            <h2 className="text-2xl font-semibold mb-6">Resultion Summary</h2>
+          <HighlightCardWrapper title="Resultion Summary">
             <SeveritySelect setSeverity={setSeverity} isLoading={isLoading} />
             <div className="sm:flex sm:space-x-4 sm:flex-wrap lg:flex-nowrap">
               <HighlightCard
@@ -186,7 +184,7 @@ const Project: FC<ProjectProps> = ({}) => {
                 total={data.total}
               />
             </div>
-          </div>
+          </HighlightCardWrapper>
           <TableWrapper>
             {data?.issues ? (
               data.issues.map((issue: any) => (
