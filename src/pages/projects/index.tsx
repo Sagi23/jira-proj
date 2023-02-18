@@ -25,7 +25,7 @@ const Projects: NextPage = () => {
 
   const projectsDataDate = getLocalStorageData("projectsDataDate");
 
-  const apiUrl = `${baseURL}/project/${auth}`;
+  const apiUrl = `${baseURL}/jira/project/${auth}`;
 
   useEffect(() => {
     if (!auth) {

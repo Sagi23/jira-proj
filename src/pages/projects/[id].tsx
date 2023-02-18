@@ -14,8 +14,6 @@ import HighlightCardWrapper from "@/components/HighlightCardWrapper";
 
 interface ProjectProps {}
 
-const auth = getLocalStorageData("auth");
-
 const Project: FC<ProjectProps> = ({}) => {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<Error | null | any>(null);
@@ -23,10 +21,12 @@ const Project: FC<ProjectProps> = ({}) => {
   const [severity, setSeverity] = useState<string>("All");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const auth = getLocalStorageData("auth");
+
   const router = useRouter();
   const { id: project_id } = router.query;
 
-  const apiUrl = `${baseURL}/search/${project_id}/${severity}/${auth}?page=${currentPage}`;
+  const apiUrl = `${baseURL}/jira/search/${project_id}/${severity}/${auth}?page=${currentPage}`;
 
   useEffect(() => {
     if (!auth) {
