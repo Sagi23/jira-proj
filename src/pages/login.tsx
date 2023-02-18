@@ -2,7 +2,6 @@ import React, { FC, useState } from "react";
 import "../app/globals.css";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { baseURL } from "@/helper";
 
 interface loginProps {}
 
@@ -16,7 +15,7 @@ const Login: FC<loginProps> = ({}) => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    fetch(`${baseURL}/login`, {
+    fetch("http://localhost:5000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
