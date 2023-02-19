@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import SearchResults from "./SearchResults";
 import Link from "next/link";
 import { getLocalStorageData } from "@/helper";
@@ -16,12 +16,13 @@ const Navbar: FC<NavbarProps> = ({}) => {
       ? JSON.parse(projectsData)
       : null;
 
-  const filteredArray = projectsDataJson.filter(
-    (item: { key: string; name: string }) =>
-      item.key.toLowerCase().includes(term.toLowerCase()) ||
-      item.name.toLowerCase().includes(term.toLowerCase())
-  );
-  console.log(filteredArray);
+  const filteredArray = useMemo(() => {
+    return projectsDataJson.filter(
+      (item: { key: string; name: string }) =>
+        item.key.toLowerCase().includes(term.toLowerCase()) ||
+        item.name.toLowerCase().includes(term.toLowerCase())
+    );
+  }, [term]);
 
   return (
     <div className="mb-28 ">
@@ -82,29 +83,26 @@ const Navbar: FC<NavbarProps> = ({}) => {
                   placeholder="Search..."
                 />
               </div>
-              {filteredArray &&
-                term.length > 0 &&
-                filteredArray.length > 0 &&
-                isActive && (
-                  <ul className="fixed z-50 flex flex-col bg-white rounded-lg">
-                    {filteredArray
-                      ?.slice(0, 10)
-                      ?.map(
-                        (p: {
-                          name: string;
-                          avatarUrls: { [x: string]: string };
-                          key: string;
-                        }) => (
-                          <SearchResults
-                            key={p.name}
-                            name={p.name}
-                            avatar={p.avatarUrls["48x48"]}
-                            jiraKey={p.key}
-                          />
-                        )
-                      )}
-                  </ul>
-                )}
+              {term.length > 0 && filteredArray?.length > 0 && isActive && (
+                <ul className="fixed z-50 flex flex-col bg-white rounded-lg">
+                  {filteredArray
+                    ?.slice(0, 10)
+                    ?.map(
+                      (p: {
+                        name: string;
+                        avatarUrls: { [x: string]: string };
+                        key: string;
+                      }) => (
+                        <SearchResults
+                          key={p.key}
+                          name={p.name}
+                          avatar={p.avatarUrls?.["48x48"]}
+                          jiraKey={p.key}
+                        />
+                      )
+                    )}
+                </ul>
+              )}
             </div>
             <button
               data-collapse-toggle="navbar-search"

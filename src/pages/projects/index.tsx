@@ -31,6 +31,9 @@ const Projects: NextPage = () => {
     if (!auth) {
       router.push("/login");
     }
+  }, [auth, router]);
+
+  useEffect(() => {
     if (!projectsData || projectsDataDate !== currentDate) {
       const fetchData = async () => {
         console.log("inside");
@@ -58,7 +61,7 @@ const Projects: NextPage = () => {
     } else {
       setData(JSON.parse(projectsData));
     }
-  }, []);
+  }, [projectsData, projectsDataDate, currentDate]);
 
   if (error) {
     return <div>An error occurred: {error.message}</div>;
