@@ -11,6 +11,8 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import { baseURL, getLocalStorageData } from "@/helper";
 import HighlightCardWrapper from "@/components/HighlightCardWrapper";
+import SeveritySummary from "@/components/SeveritySummary";
+import ResultionSummary from "@/components/ResultionSummary";
 
 interface ProjectProps {}
 
@@ -32,64 +34,76 @@ const Project: FC<ProjectProps> = ({}) => {
     if (!auth) {
       router.push("/login");
     }
+  }, [auth, router]);
+
+  useEffect(() => {
     if (
       typeof project_id === "string" &&
       project_id !== project_id.toUpperCase()
     ) {
       router.replace(`/projects/${project_id.toUpperCase()}`);
     }
+  }, [project_id, router]);
+
+  useEffect(() => {
     const fetchData = async () => {
+      if (!project_id) {
+        return;
+      }
+
+      setIsLoading(true);
+
       try {
-        if (project_id !== undefined) {
-          setIsLoading(true);
-          const response = await fetch(apiUrl, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-          if (!response.ok) {
-            throw new Error("Failed to fetch data from Jira API");
-          }
-
-          const jsonData = await response.json();
-          const parsedData = JSON.parse(jsonData.data);
-          const totalIssues = jsonData.total_issues;
-          const totalBlocker = jsonData.total_blocker;
-          const totalCritical = jsonData.total_critical;
-          const totalMajor = jsonData.total_major;
-          const totalMinor = jsonData.total_minor;
-          const totalCosmetic = jsonData.total_cosmetic;
-          const totalOpen = jsonData.total_open;
-          const totalClosed = jsonData.total_closed;
-          const totalreopened = jsonData.total_reopened;
-          const totalInProgress = jsonData.total_in_progress;
-          const totalCustomerApproval = jsonData.total_customer_approval;
-          const projectName = jsonData.project_name;
-
-          setData({
-            ...parsedData,
-            totalIssues,
-            totalBlocker,
-            totalCritical,
-            totalMajor,
-            totalMinor,
-            totalOpen,
-            totalClosed,
-            totalreopened,
-            totalInProgress,
-            totalCustomerApproval,
-            totalCosmetic,
-            projectName,
-          });
-          setIsLoading(false);
-          localStorage.setItem("project_id", project_id as string);
+        if (!response.ok) {
+          throw new Error("Failed to fetch data from Jira API");
         }
+
+        const jsonData = await response.json();
+        const {
+          data,
+          total_issues: totalIssues,
+          total_blocker: totalBlocker,
+          total_critical: totalCritical,
+          total_major: totalMajor,
+          total_minor: totalMinor,
+          total_cosmetic: totalCosmetic,
+          total_open: totalOpen,
+          total_closed: totalClosed,
+          total_reopened: totalreopened,
+          total_in_progress: totalInProgress,
+          total_customer_approval: totalCustomerApproval,
+          project_name: projectName,
+        } = jsonData;
+
+        setData({
+          ...JSON.parse(data),
+          totalIssues,
+          totalBlocker,
+          totalCritical,
+          totalMajor,
+          totalMinor,
+          totalOpen,
+          totalClosed,
+          totalreopened,
+          totalInProgress,
+          totalCustomerApproval,
+          totalCosmetic,
+          projectName,
+        });
+        localStorage.setItem("project_id", project_id as string);
+        setIsLoading(false);
       } catch (error) {
         setError(error);
       }
     };
+
     fetchData();
   }, [apiUrl, severity, currentPage, project_id]);
 
@@ -114,80 +128,22 @@ const Project: FC<ProjectProps> = ({}) => {
         <title>{data.projectName}</title>
         <meta property="og:title" content={data.projectName} key="title" />
       </Head>
+      {isLoading && <Loader />}
       <Navbar />
-      <div className="w-3/4 mx-auto mt-12 mb-20">
+      <div className="w-3/4 mx-auto pt-12 mb-20">
         <h1 className="text-4xl text-center font-semibold mb-12">
           {currentProject?.name}
         </h1>
-        <div>
-          <HighlightCardWrapper title="Severity Summary">
-            <div className="sm:flex sm:gap-4 sm:flex-wrap lg:flex-nowrap">
-              <HighlightCard
-                amount={data.totalIssues}
-                title="Total Issues"
-                total={data.totalIssues}
-              />
-              <HighlightCard
-                amount={data.totalBlocker}
-                title="Total Blockers"
-                total={data.totalIssues}
-              />
-              <HighlightCard
-                amount={data.totalCritical}
-                title="Total Criticals"
-                total={data.totalIssues}
-              />
-              <HighlightCard
-                amount={data.totalMajor}
-                title="Total Majors"
-                total={data.totalIssues}
-              />
-              <HighlightCard
-                amount={data.totalMinor}
-                title="Total Minors"
-                total={data.totalIssues}
-              />
-              <HighlightCard
-                amount={data.totalCosmetic}
-                title="Total Cosemtic"
-                total={data.totalIssues}
-              />
-            </div>
-          </HighlightCardWrapper>
-          {isLoading && <Loader />}
-          <HighlightCardWrapper title="Resultion Summary">
-            <SeveritySelect setSeverity={setSeverity} isLoading={isLoading} />
-            <div className="sm:flex sm:space-x-4 sm:flex-wrap lg:flex-nowrap">
-              <HighlightCard
-                amount={data.totalOpen}
-                title="Total Open"
-                total={data.total}
-              />
-              <HighlightCard
-                amount={data.totalreopened}
-                title="Total Reopened"
-                total={data.total}
-              />
-              <HighlightCard
-                amount={data.totalInProgress}
-                title="Total In Progress"
-                total={data.total}
-              />
-              <HighlightCard
-                amount={data.totalCustomerApproval}
-                title="Total Customer Approval"
-                total={data.total}
-              />
-              <HighlightCard
-                amount={data.totalClosed}
-                title="Total Closed"
-                total={data.total}
-              />
-            </div>
-          </HighlightCardWrapper>
-          <TableWrapper>
-            {data?.issues ? (
-              data.issues.map((issue: any) => (
+        <SeveritySummary data={data} />
+        <ResultionSummary
+          data={data}
+          isLoading={isLoading}
+          setSeverity={setSeverity}
+        />
+        {data?.issues.length > 0 ? (
+          <>
+            <TableWrapper>
+              {data.issues.map((issue: any) => (
                 <IssuesTable
                   key={issue.key}
                   issueId={issue.key}
@@ -195,18 +151,18 @@ const Project: FC<ProjectProps> = ({}) => {
                   summary={issue.fields.summary}
                   severity={issue.fields.customfield_10200?.value}
                 />
-              ))
-            ) : (
-              <p>No data available</p>
-            )}
-          </TableWrapper>
-        </div>
-        <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalIssues={data.total}
-          isLoading={isLoading}
-        />
+              ))}
+            </TableWrapper>
+            <Pagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalIssues={data.total}
+              isLoading={isLoading}
+            />
+          </>
+        ) : (
+          <p className="text-xl text-center">No Issues Were Found!</p>
+        )}
       </div>
     </>
   );
